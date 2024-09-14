@@ -1,0 +1,35 @@
+import PIL.Image
+import google.generativeai as genai
+import pyexiv2
+import json
+
+GOOGLE_API_KEY=('AIzaSyBgYZEqneUOhc7qZOL62S0tt2RtuecHw_Q')
+genai.configure(api_key=GOOGLE_API_KEY)
+
+model = genai.GenerativeModel("gemini-1.5-flash")
+organ = PIL.Image.open("media/berger.jpg")
+
+response1 = model.generate_content(["Describe this picture in 60 characters.", organ], 
+                                   generation_config=genai.types.GenerationConfig( max_output_tokens=60 ))
+print("Title :",response1.text)
+title = response1.text
+response2 = model.generate_content(["give this image a name", organ])
+print("Image Name :",response2.text)
+response3 = model.generate_content(["Find keywords for this image", organ])
+print("keywords :",response3.text)
+keywords = response3.text.replace('-',',')
+
+metadata = pyexiv2.ImageMetadata("media/berger.jpg")
+metadata.read()
+
+metadata['Exif.Image.XPTitle']=title
+metadata['Exif.Image.XPKeywords']=keywords
+
+metadata.write()
+#print("usage_metadata :",response.usage_metadata)
+#print("candidates :",response.candidates)
+#print("prompt_feedback :",response.prompt_feedback)
+#print("parts :",response.parts)
+#print("text :",response.text)
+
+

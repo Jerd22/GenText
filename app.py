@@ -7,7 +7,7 @@ from json_tools import extract_json,validate_json_with_model,model_to_json,json_
 from gemeni_generate import generate_text
 
 
-pillow_img   = PillowImage.open("images/organ.jpg")
+pillow_img   = PillowImage.open("images/images_1.jpg")
 file_name = ""
 class PromptModel(BaseModel):
     # Define your fields here, for example:
